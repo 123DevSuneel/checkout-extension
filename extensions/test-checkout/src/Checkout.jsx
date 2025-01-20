@@ -4,8 +4,6 @@ import {
   BlockStack,
   Heading,
   useApi,
-  useInstructions,
-  useTranslate,
   useCartLines,
   Text,
   Image,
@@ -14,9 +12,9 @@ import {
   useApplyCartLinesChange,
   Progress,
   Icon,
-  Pressable
+  Pressable,
+  Button
 } from "@shopify/ui-extensions-react/checkout";
-import { Button } from "@shopify/ui-extensions/checkout";
 import { useEffect, useState } from "react";
 
 // 1. Choose an extension target
@@ -26,12 +24,10 @@ export default reactExtension("purchase.checkout.reductions.render-after", () =>
 
 function UpsellExtension() {
   let products = [];
-  const translate = useTranslate();
   const { query } = useApi();
   const [recommendedItems, setRecommendedItems] = useState([]);
   const [visibleItems, setVisibleItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const instructions = useInstructions();
   const applyCartLinesChange = useApplyCartLinesChange();
   const cartLineItems = useCartLines();
 
@@ -100,15 +96,6 @@ function UpsellExtension() {
   useEffect(() => {
     setVisibleItems(recommendedItems.slice(currentIndex, currentIndex + 2));
   }, [currentIndex, recommendedItems]);
-
-  // 2. Check instructions for feature availability
-  if (!instructions.attributes.canUpdateAttributes) {
-    return (
-      <Banner title="test-checkout" status="warning">
-        {translate("attributeChangesAreNotSupported")}
-      </Banner>
-    );
-  }
 
   // 3. Render a UI
   return (
